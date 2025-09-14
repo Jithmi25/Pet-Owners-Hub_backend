@@ -1,0 +1,23 @@
+{
+    "name": "express-app",
+    "version": "1.0.0",
+    "description": "A simple Express server application",
+    "main": "index.js",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "body-parser": "^1.20.3",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.9.0",
+        "nodemailer": "^6.9.16",
+        "nodeman": "^1.1.2",
+        "nodemon": "^3.1.9"
+    },
+    "type": "module",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "",
+    "license": "ISC"
+}
