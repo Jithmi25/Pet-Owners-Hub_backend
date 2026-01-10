@@ -12,10 +12,10 @@ const sendError = (res, status, message) => res.status(status).json({ message })
 
 export const registerUser = async (req, res) => {
 	try {
-		const { name, email, password } = req.body;
+		const { name, email, password, phone, firstName, lastName } = req.body;
 
 		if (!name || !email || !password) {
-			return sendError(res, 400, "name, email and password are required");
+			return sendError(res, 400, "Name, email and password are required");
 		}
 
 		const existing = await User.findOne({ email });
@@ -24,14 +24,38 @@ export const registerUser = async (req, res) => {
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
-		const user = await User.create({ name, email, password: hashedPassword });
+		
+		// Prepare user data
+		const userData = {
+			name,
+			email,
+			password: hashedPassword,
+			phone: phone || "",
+			firstName: firstName || name.split(' ')[0],
+			lastName: lastName || name.split(' ').slice(1).join(' ') || ""
+		};
+
+		const user = await User.create(userData);
+
+		// Format join date for frontend
+		const joinDate = new Date(user.createdAt).toLocaleDateString('en-US', { 
+			month: 'short', 
+			year: 'numeric' 
+		});
 
 		return res.status(201).json({
 			message: "User registered successfully",
+			token: jwt.sign({ id: user._id, email: user.email }, jwtSecret, {
+				expiresIn: "7d",
+			}),
 			user: {
 				id: user._id,
 				name: user.name,
 				email: user.email,
+				phone: user.phone,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				joinDate: joinDate
 			},
 		});
 	} catch (err) {
@@ -45,7 +69,7 @@ export const loginUser = async (req, res) => {
 		const { email, password } = req.body;
 
 		if (!email || !password) {
-			return sendError(res, 400, "email and password are required");
+			return sendError(res, 400, "Email and password are required");
 		}
 
 		const user = await User.findOne({ email });
@@ -62,6 +86,12 @@ export const loginUser = async (req, res) => {
 			expiresIn: "7d",
 		});
 
+		// Format join date for frontend
+		const joinDate = new Date(user.createdAt).toLocaleDateString('en-US', { 
+			month: 'short', 
+			year: 'numeric' 
+		});
+
 		return res.json({
 			message: "Login successful",
 			token,
@@ -69,6 +99,10 @@ export const loginUser = async (req, res) => {
 				id: user._id,
 				name: user.name,
 				email: user.email,
+				phone: user.phone,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				joinDate: joinDate
 			},
 		});
 	} catch (err) {

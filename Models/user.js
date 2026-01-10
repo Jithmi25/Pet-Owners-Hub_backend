@@ -14,11 +14,27 @@ const userSchema = new mongoose.Schema(
 			lowercase: true,
 			trim: true,
 		},
+		phone: {
+			type: String,
+			trim: true,
+		},
 		password: {
 			type: String,
 			required: true,
 			minlength: 6,
 		},
+		firstName: {
+			type: String,
+			trim: true,
+		},
+		lastName: {
+			type: String,
+			trim: true,
+		},
+		address: {
+			type: String,
+			trim: true,
+		}
 	},
 	{
 		timestamps: true,
@@ -28,4 +44,3 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
