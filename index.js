@@ -2,7 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './Routes/userRouter.js';
+import clinicRouter from './Routes/clinicRouter.js';
 import cors from 'cors';
+import { seedClinics } from './Data/seedDatabase.js';
 
 dotenv.config();
 
@@ -26,7 +28,11 @@ app.use(express.json());
 
 mongoose
   .connect(MONGO_DB_URL)
-  .then(() => console.log("✅ Connected to MongoDB"))
+  .then(() => {
+    console.log("✅ Connected to MongoDB");
+    // Seed clinics after successful connection
+    seedClinics();
+  })
   .catch((err) => console.error("❌ Connection error:", err));
 
 const db = mongoose.connection;
@@ -44,6 +50,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/clinics", clinicRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
