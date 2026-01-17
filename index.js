@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRouter from './Routes/userRouter.js';
 import clinicRouter from './Routes/clinicRouter.js';
 import shopRouter from './Routes/shopRouter.js';
+import listingRouter from './Routes/listingRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
 
@@ -53,6 +54,7 @@ app.get("/", (_req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/clinics", clinicRouter);
 app.use("/api/shops", shopRouter);
+app.use("/api/listings", listingRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
