@@ -5,6 +5,8 @@ import userRouter from './Routes/userRouter.js';
 import clinicRouter from './Routes/clinicRouter.js';
 import shopRouter from './Routes/shopRouter.js';
 import listingRouter from './Routes/listingRouter.js';
+import adminRouter from './Routes/adminRouter.js';
+import authRouter from './Routes/authRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
 
@@ -52,9 +54,11 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/clinics", clinicRouter);
 app.use("/api/shops", shopRouter);
 app.use("/api/listings", listingRouter);
+app.use("/api/admin", adminRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
