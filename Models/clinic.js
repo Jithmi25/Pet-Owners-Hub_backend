@@ -107,6 +107,12 @@ const clinicSchema = new mongoose.Schema(
       default: true,
       index: true,
     },
+    verificationStatus: {
+      type: String,
+      enum: ['verified', 'pending'],
+      default: 'pending',
+      index: true,
+    },
     availability: [
       {
         dayOfWeek: {
