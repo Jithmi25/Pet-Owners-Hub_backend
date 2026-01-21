@@ -7,8 +7,10 @@ import shopRouter from './Routes/shopRouter.js';
 import listingRouter from './Routes/listingRouter.js';
 import adminRouter from './Routes/adminRouter.js';
 import authRouter from './Routes/authRouter.js';
+import petRouter from './Routes/petRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
+import { seedPets } from './Data/seedPets.js';
 
 dotenv.config();
 
@@ -34,8 +36,9 @@ mongoose
   .connect(MONGO_DB_URL)
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    // Seed clinics after successful connection
+    // Seed data after successful connection
     seedClinics();
+    seedPets();
   })
   .catch((err) => console.error("❌ Connection error:", err));
 
@@ -59,6 +62,7 @@ app.use("/api/clinics", clinicRouter);
 app.use("/api/shops", shopRouter);
 app.use("/api/listings", listingRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/admin/pets", petRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
