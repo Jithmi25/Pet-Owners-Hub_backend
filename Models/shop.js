@@ -137,9 +137,15 @@ const shopSchema = new mongoose.Schema(
         default: null,
       },
     },
+    type: {
+      type: String,
+      enum: ['premium', 'budget'],
+      default: 'budget',
+      lowercase: true,
+    },
     status: {
       type: String,
-      enum: ['pending', 'approved', 'rejected'],
+      enum: ['pending', 'approved', 'rejected', 'verified'],
       default: 'pending',
     },
     createdAt: {

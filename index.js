@@ -11,6 +11,7 @@ import petRouter from './Routes/petRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
 import { seedPets } from './Data/seedPets.js';
+import { seedShops } from './Data/seedShops.js';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ mongoose
     // Seed data after successful connection
     seedClinics();
     seedPets();
+    seedShops();
   })
   .catch((err) => console.error("❌ Connection error:", err));
 
