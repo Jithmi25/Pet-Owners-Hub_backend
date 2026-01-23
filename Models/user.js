@@ -34,6 +34,28 @@ const userSchema = new mongoose.Schema(
 		address: {
 			type: String,
 			trim: true,
+		},
+		role: {
+			type: String,
+			enum: ['User', 'Admin', 'Moderator'],
+			default: 'User',
+		},
+		status: {
+			type: String,
+			enum: ['Active', 'Inactive', 'Suspended', 'Banned'],
+			default: 'Active',
+		},
+		lastLogin: {
+			type: Date,
+			default: null,
+		},
+		profileImage: {
+			type: String,
+			default: null,
+		},
+		isVerified: {
+			type: Boolean,
+			default: false,
 		}
 	},
 	{

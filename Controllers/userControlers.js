@@ -77,10 +77,18 @@ export const loginUser = async (req, res) => {
 			return sendError(res, 401, "Invalid credentials");
 		}
 
+		// Check if user account is active
+		if (user.status && user.status !== 'Active') {
+			return sendError(res, 403, `Account is ${user.status.toLowerCase()}. Please contact support.`);
+		}
+
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			return sendError(res, 401, "Invalid credentials");
 		}
+
+		// Update last login timestamp
+		await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
 
 		const token = jwt.sign({ id: user._id, email: user.email }, jwtSecret, {
 			expiresIn: "7d",
@@ -102,6 +110,7 @@ export const loginUser = async (req, res) => {
 				phone: user.phone,
 				firstName: user.firstName,
 				lastName: user.lastName,
+				role: user.role,
 				joinDate: joinDate
 			},
 		});

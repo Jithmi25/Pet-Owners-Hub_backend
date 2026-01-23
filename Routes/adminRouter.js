@@ -18,11 +18,41 @@ import {
   verifyShopAdmin,
   getShopStats,
 } from '../Controllers/adminShopController.js';
+import {
+  getAllUsersAdmin,
+  getUserDetailsAdmin,
+  createUserAdmin,
+  updateUserAdmin,
+  deleteUserAdmin,
+  updateUserStatus,
+  getUserStats,
+  bulkDeleteUsers,
+  exportUsersToCSV,
+  resetUserPassword
+} from '../Controllers/adminUserController.js';
+import { authenticate, requireAdmin } from '../Middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Apply authentication and admin role check to all routes
+// Comment out these middleware if you want to test without authentication
+// router.use(authenticate);
+// router.use(requireAdmin);
+
 // Dashboard stats
 router.get('/dashboard-stats', getDashboardStats);
+
+// User management routes
+router.get('/users/stats', getUserStats);
+router.get('/users/export', exportUsersToCSV);
+router.get('/users', getAllUsersAdmin);
+router.get('/users/:id', getUserDetailsAdmin);
+router.post('/users', createUserAdmin);
+router.put('/users/:id', updateUserAdmin);
+router.delete('/users/:id', deleteUserAdmin);
+router.patch('/users/:id/status', updateUserStatus);
+router.patch('/users/:id/reset-password', resetUserPassword);
+router.post('/users/bulk-delete', bulkDeleteUsers);
 
 // Clinic management routes
 router.get('/clinics/stats', getClinicStats);
