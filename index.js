@@ -9,6 +9,7 @@ import adminRouter from './Routes/adminRouter.js';
 import authRouter from './Routes/authRouter.js';
 import petRouter from './Routes/petRouter.js';
 import reportsRouter from './Routes/reportsRouter.js';
+import systemSettingsRouter from './Routes/systemSettingsRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
 import { seedPets } from './Data/seedPets.js';
@@ -67,6 +68,7 @@ app.use("/api/listings", listingRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/admin/pets", petRouter);
 app.use("/api/admin/reports", reportsRouter);
+app.use("/api/admin/settings", systemSettingsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
