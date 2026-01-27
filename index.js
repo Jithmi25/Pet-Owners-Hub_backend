@@ -10,6 +10,7 @@ import authRouter from './Routes/authRouter.js';
 import petRouter from './Routes/petRouter.js';
 import reportsRouter from './Routes/reportsRouter.js';
 import systemSettingsRouter from './Routes/systemSettingsRouter.js';
+import uploadRouter from './Routes/uploadRouter.js';
 import cors from 'cors';
 import { seedClinics } from './Data/seedDatabase.js';
 import { seedPets } from './Data/seedPets.js';
@@ -34,6 +35,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static('uploads'));
 
 mongoose
   .connect(MONGO_DB_URL)
@@ -66,6 +70,7 @@ app.use("/api/clinics", clinicRouter);
 app.use("/api/shops", shopRouter);
 app.use("/api/listings", listingRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/upload", uploadRouter);
 app.use("/api/admin/pets", petRouter);
 app.use("/api/admin/reports", reportsRouter);
 app.use("/api/admin/settings", systemSettingsRouter);

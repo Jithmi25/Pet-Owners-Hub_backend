@@ -1,0 +1,4 @@
+# Uploads folder for user-uploaded images
+# Images are stored here temporarily
+*
+!.gitignore
