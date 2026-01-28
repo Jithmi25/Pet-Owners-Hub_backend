@@ -1,8 +1,8 @@
-import User from '../Models/userModel.js';
-import Pet from '../Models/petModel.js';
-import Shop from '../Models/shopModel.js';
-import Clinic from '../Models/clinicModel.js';
-import Transaction from '../Models/transactionModel.js';
+import User from '../Models/user.js';
+import Pet from '../Models/pet.js';
+import Shop from '../Models/shop.js';
+import Clinic from '../Models/clinic.js';
+import Listing from '../Models/listing.js';
 
 // Helper function to filter data by date range
 const filterByDateRange = (data, startDate, endDate, dateField = 'createdAt') => {
@@ -26,24 +26,18 @@ export const getSummaryReport = async (req, res) => {
         // Fetch all data
         const users = await User.find();
         const pets = await Pet.find();
-        const transactions = await Transaction.find() || [];
         const shops = await Shop.find();
         const clinics = await Clinic.find();
         
         // Filter by date range
         const filteredUsers = filterByDateRange(users, fromDate, toDate);
         const filteredPets = filterByDateRange(pets, fromDate, toDate);
-        const filteredTransactions = filterByDateRange(transactions, fromDate, toDate);
         
         // Calculate statistics
         const totalUsers = filteredUsers.length;
         const totalPets = filteredPets.length;
-        const totalTransactions = filteredTransactions.length;
-        
-        // Calculate revenue (if transactions have amount field)
-        const totalRevenue = filteredTransactions.reduce((sum, transaction) => {
-            return sum + (transaction.amount || 0);
-        }, 0);
+        const totalTransactions = 0;
+        const totalRevenue = 0;
         
         // Count active users (assumed to have status='active')
         const activeUsers = filteredUsers.filter(u => u.status === 'active').length;
@@ -74,12 +68,7 @@ export const getSummaryReport = async (req, res) => {
         const petTrend = previousPets > 0 ? 
             Math.round(((totalPets - previousPets) / previousPets) * 100) : 0;
         
-        const previousTransactions = filterByDateRange(transactions, 
-            previousStart.toISOString().split('T')[0], 
-            previousEnd.toISOString().split('T')[0]
-        ).length;
-        const transactionTrend = previousTransactions > 0 ? 
-            Math.round(((totalTransactions - previousTransactions) / previousTransactions) * 100) : 0;
+        const transactionTrend = 0;
         
         res.status(200).json({
             success: true,
@@ -353,12 +342,11 @@ export const exportReportAsCSV = async (req, res) => {
 async function getSummaryReportData(fromDate, toDate) {
     const users = await User.find();
     const pets = await Pet.find();
-    const transactions = await Transaction.find() || [];
     
     return {
         users: filterByDateRange(users, fromDate, toDate),
         pets: filterByDateRange(pets, fromDate, toDate),
-        transactions: filterByDateRange(transactions, fromDate, toDate)
+        transactions: []
     };
 }
 
@@ -373,8 +361,7 @@ async function getPetListingsData(fromDate, toDate) {
 }
 
 async function getTransactionsData(fromDate, toDate) {
-    let transactions = await Transaction.find() || [];
-    return filterByDateRange(transactions, fromDate, toDate);
+    return [];
 }
 
 function generateSummaryCsv(data) {
@@ -427,15 +414,12 @@ export const getAllReportsData = async (req, res) => {
         
         const users = await User.find();
         const pets = await Pet.find();
-        const transactions = await Transaction.find() || [];
         const shops = await Shop.find();
         const clinics = await Clinic.find();
         
         const filteredUsers = filterByDateRange(users, fromDate, toDate);
         const filteredPets = filterByDateRange(pets, fromDate, toDate);
-        const filteredTransactions = filterByDateRange(transactions, fromDate, toDate);
-        
-        const totalRevenue = filteredTransactions.reduce((sum, t) => sum + (t.amount || 0), 0);
+        const totalRevenue = 0;
         
         res.status(200).json({
             success: true,
@@ -462,12 +446,7 @@ export const getAllReportsData = async (req, res) => {
                     status: p.status,
                     listed: p.createdAt
                 })),
-                transactions: filteredTransactions.map(t => ({
-                    id: t._id,
-                    amount: t.amount,
-                    status: t.status,
-                    date: t.createdAt
-                }))
+                transactions: []
             }
         });
     } catch (error) {
